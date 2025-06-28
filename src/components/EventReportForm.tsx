@@ -7,7 +7,9 @@ import {
   AlertTriangle, 
   Calendar,
   Tag,
-  FileText
+  FileText,
+  X,
+  ArrowLeft
 } from 'lucide-react';
 import { MediaUpload } from './MediaUpload';
 import { addEvent } from '../firebase/firestore';
@@ -150,13 +152,24 @@ export const EventReportForm: React.FC<EventReportFormProps> = ({
       className={`bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto ${className}`}
     >
       <div className="p-6">
+        {/* Header with Back Button */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Report City Event</h2>
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={onCancel}
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              title="Back"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+            <h2 className="text-2xl font-bold text-gray-900">Report City Event</h2>
+          </div>
           <button
             onClick={onCancel}
-            className="text-gray-400 hover:text-gray-600"
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            title="Close"
           >
-            ×
+            <X className="h-5 w-5" />
           </button>
         </div>
 
@@ -329,9 +342,10 @@ export const EventReportForm: React.FC<EventReportFormProps> = ({
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center justify-center space-x-2"
             >
-              Cancel
+              <ArrowLeft className="h-4 w-4" />
+              <span>Cancel</span>
             </button>
             <button
               type="submit"

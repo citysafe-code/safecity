@@ -8,7 +8,9 @@ import {
   EyeOff, 
   AlertCircle,
   CheckCircle,
-  Loader
+  Loader,
+  X,
+  ArrowLeft
 } from 'lucide-react';
 import { signIn, signUp, resetPassword } from '../firebase/auth';
 
@@ -124,17 +126,38 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         className="bg-white rounded-lg shadow-xl max-w-md w-full p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            {mode === 'signin' && 'Sign In'}
-            {mode === 'signup' && 'Create Account'}
-            {mode === 'reset' && 'Reset Password'}
-          </h2>
-          <p className="text-gray-600 mt-2">
-            {mode === 'signin' && 'Welcome back to City Pulse'}
-            {mode === 'signup' && 'Join the City Pulse community'}
-            {mode === 'reset' && 'Enter your email to reset password'}
-          </p>
+        {/* Header with Back Button */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-3">
+            {mode !== 'signin' && (
+              <button
+                onClick={() => switchMode('signin')}
+                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                title="Back to Sign In"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+            )}
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {mode === 'signin' && 'Sign In'}
+                {mode === 'signup' && 'Create Account'}
+                {mode === 'reset' && 'Reset Password'}
+              </h2>
+              <p className="text-gray-600 text-sm">
+                {mode === 'signin' && 'Welcome back to City Pulse'}
+                {mode === 'signup' && 'Join the City Pulse community'}
+                {mode === 'reset' && 'Enter your email to reset password'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors"
+            title="Close"
+          >
+            <X className="h-4 w-4" />
+          </button>
         </div>
 
         {error && (

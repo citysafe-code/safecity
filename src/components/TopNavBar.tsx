@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Filter, Menu, Activity, Shield, Users, TrendingUp, Map, Layers } from 'lucide-react';
+import { Search, Filter, Menu, Activity, Shield, Users, TrendingUp, Map, Layers, X } from 'lucide-react';
 import { FilterOptions } from '../types';
 
 interface TopNavBarProps {
@@ -30,6 +30,17 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
 }) => {
   const [showFilters, setShowFilters] = useState(false);
 
+  const clearFilters = () => {
+    setFilters({
+      category: '',
+      severity: '',
+      timeRange: ''
+    });
+    setShowFilters(false);
+  };
+
+  const hasActiveFilters = filters.category || filters.severity || filters.timeRange;
+
   return (
     <motion.nav
       className="bg-white shadow-lg border-b border-gray-200 px-4 py-3 flex items-center justify-between relative z-20"
@@ -43,6 +54,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
           className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          title={isSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
         >
           <Menu className="h-5 w-5 text-gray-600" />
         </motion.button>
@@ -93,6 +105,14 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -134,15 +154,25 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
 
             <motion.button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center space-x-2 px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                hasActiveFilters 
+                  ? 'bg-blue-100 text-blue-700 border border-blue-200' 
+                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Filter className="h-4 w-4 text-gray-600" />
-              <span className="text-sm font-medium text-gray-700">Filters</span>
+              <Filter className="h-4 w-4" />
+              <span className="text-sm font-medium">Filters</span>
+              {hasActiveFilters && (
+                <span className="bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {[filters.category, filters.severity, filters.timeRange].filter(Boolean).length}
+                </span>
+              )}
             </motion.button>
           </div>
 
+          {/* Filters Dropdown */}
           {showFilters && (
             <motion.div
               className="absolute top-full right-4 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 p-4 w-80 z-30"
@@ -150,6 +180,26 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
             >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-gray-900">Filter Events</h3>
+                <div className="flex items-center space-x-2">
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearFilters}
+                      className="text-sm text-blue-600 hover:text-blue-700"
+                    >
+                      Clear all
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
@@ -193,6 +243,14 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
                   </select>
                 </div>
               </div>
+
+              {hasActiveFilters && (
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="text-sm text-gray-600">
+                    Active filters: {[filters.category, filters.severity, filters.timeRange].filter(Boolean).join(', ')}
+                  </div>
+                </div>
+              )}
             </motion.div>
           )}
         </>

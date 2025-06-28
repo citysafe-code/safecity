@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, TrendingUp, AlertCircle, Calendar } from 'lucide-react';
+import { ChevronLeft, TrendingUp, AlertCircle, Calendar, X, ArrowLeft } from 'lucide-react';
 import { CityEvent, FilterOptions } from '../types';
 import { EventCard } from './EventCard';
 
@@ -62,6 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <AnimatePresence>
       {isOpen && (
         <>
+          {/* Mobile Overlay */}
           <motion.div
             className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
             initial={{ opacity: 0 }}
@@ -69,27 +70,46 @@ export const Sidebar: React.FC<SidebarProps> = ({
             exit={{ opacity: 0 }}
             onClick={onClose}
           />
+          
+          {/* Sidebar */}
           <motion.div
-            className="fixed left-0 top-0 h-full bg-white shadow-xl z-40 flex flex-col"
+            className="fixed left-0 top-0 h-full bg-white shadow-xl z-40 flex flex-col lg:relative lg:shadow-none"
             initial={{ x: -400 }}
             animate={{ x: 0 }}
             exit={{ x: -400 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
             style={{ width: '400px' }}
           >
+            {/* Header */}
             <div className="p-4 border-b border-gray-200">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-gray-900">City Events</h2>
-                <motion.button
-                  onClick={onClose}
-                  className="p-1 rounded-lg hover:bg-gray-100 lg:hidden"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <ChevronLeft className="h-5 w-5 text-gray-600" />
-                </motion.button>
+                <div className="flex items-center space-x-2">
+                  {/* Close button for mobile */}
+                  <motion.button
+                    onClick={onClose}
+                    className="p-1 rounded-lg hover:bg-gray-100 lg:hidden"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    title="Close sidebar"
+                  >
+                    <X className="h-5 w-5 text-gray-600" />
+                  </motion.button>
+                  
+                  {/* Collapse button for desktop */}
+                  <motion.button
+                    onClick={onClose}
+                    className="p-1 rounded-lg hover:bg-gray-100 hidden lg:block"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    title="Collapse sidebar"
+                  >
+                    <ChevronLeft className="h-5 w-5 text-gray-600" />
+                  </motion.button>
+                </div>
               </div>
               
+              {/* Stats Grid */}
               <div className="grid grid-cols-3 gap-3">
                 <div className="bg-blue-50 rounded-lg p-3 text-center">
                   <div className="flex items-center justify-center mb-1">
@@ -117,6 +137,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
             </div>
             
+            {/* Events List */}
             <div className="flex-1 overflow-y-auto">
               <div className="p-4 space-y-3">
                 {filteredEvents.length > 0 ? (
@@ -132,9 +153,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <div className="text-gray-400 mb-2">
                       <AlertCircle className="h-12 w-12 mx-auto" />
                     </div>
-                    <p className="text-gray-500">No events match your criteria</p>
+                    <p className="text-gray-500 text-sm">No events match your criteria</p>
+                    <p className="text-gray-400 text-xs mt-1">Try adjusting your search or filters</p>
                   </motion.div>
                 )}
+              </div>
+            </div>
+
+            {/* Footer with quick actions */}
+            <div className="p-4 border-t border-gray-200 bg-gray-50">
+              <div className="text-xs text-gray-500 text-center">
+                Last updated: {new Date().toLocaleTimeString()}
               </div>
             </div>
           </motion.div>

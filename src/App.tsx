@@ -10,7 +10,7 @@ import { mockEvents } from './data/mockEvents';
 import { FilterOptions } from './types';
 import { useEvents, useUserLocation } from './hooks/useFirestore';
 import { onAuthStateChange, getCurrentUser } from './firebase/auth';
-import { Plus, User, LogOut } from 'lucide-react';
+import { Plus, User, LogOut, ArrowLeft } from 'lucide-react';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -84,8 +84,64 @@ function App() {
     setShowAuthModal(false);
   };
 
+  const handleBackToDashboard = () => {
+    setCurrentView('dashboard');
+  };
+
+  const handleLogout = async () => {
+    try {
+      // Import logout function dynamically to avoid circular imports
+      const { logout } = await import('./firebase/auth');
+      await logout();
+      setUser(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   if (currentView === 'moderator') {
-    return <ModeratorDashboard />;
+    return (
+      <div className="h-screen flex flex-col bg-gray-50">
+        {/* Moderator Header with Back Button */}
+        <div className="bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <motion.button
+              onClick={handleBackToDashboard}
+              className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="text-sm font-medium">Back to Dashboard</span>
+            </motion.button>
+            <div className="h-6 w-px bg-gray-300"></div>
+            <h1 className="text-xl font-bold text-gray-900">Moderator Dashboard</h1>
+          </div>
+          
+          {user && (
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span className="text-sm font-medium text-blue-600">
+                    {user.displayName?.charAt(0) || user.email?.charAt(0) || 'M'}
+                  </span>
+                </div>
+                <span className="text-sm text-gray-700">{user.displayName || user.email}</span>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+                title="Logout"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+        </div>
+        
+        <ModeratorDashboard />
+      </div>
+    );
   }
 
   return (
@@ -157,6 +213,19 @@ function App() {
             <User className="h-5 w-5" />
           )}
         </motion.button>
+
+        {/* Logout Button (only show if user is logged in) */}
+        {user && (
+          <motion.button
+            onClick={handleLogout}
+            className="w-12 h-12 bg-red-50 text-red-600 rounded-full shadow-lg hover:bg-red-100 flex items-center justify-center border border-red-200"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            title="Logout"
+          >
+            <LogOut className="h-5 w-5" />
+          </motion.button>
+        )}
       </div>
 
       {/* Loading indicator for Firebase data */}
