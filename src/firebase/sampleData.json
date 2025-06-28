@@ -1,0 +1,322 @@
+{
+  "events": {
+    "event_001": {
+      "id": "event_001",
+      "title": "Heavy Traffic on I-280 Southbound",
+      "description": "Multiple lane closure due to construction work causing significant delays during rush hour",
+      "eventType": "traffic",
+      "timestamp": "2024-01-15T08:30:00Z",
+      "location": {
+        "latitude": 37.4419,
+        "longitude": -122.1430,
+        "address": "I-280 near Sand Hill Rd",
+        "neighborhood": "Menlo Park",
+        "city": "Menlo Park",
+        "state": "CA",
+        "country": "USA"
+      },
+      "mediaUrls": [
+        "https://storage.googleapis.com/city-pulse/images/traffic_001.jpg",
+        "https://storage.googleapis.com/city-pulse/videos/traffic_001.mp4"
+      ],
+      "userId": "user_123",
+      "aiSummary": "User-reported traffic congestion on I-280 southbound near Sand Hill Road. Construction-related lane closures causing 20-30 minute delays. High confidence based on multiple user reports and traffic sensor data.",
+      "source": "user",
+      "sentimentScore": -0.7,
+      "severity": "high",
+      "status": "active",
+      "tags": ["construction", "rush-hour", "highway", "delays"],
+      "verificationCount": 5,
+      "reportCount": 12,
+      "upvotes": 8,
+      "downvotes": 1,
+      "createdAt": "2024-01-15T08:30:00Z",
+      "updatedAt": "2024-01-15T09:15:00Z",
+      "expiresAt": "2024-01-15T18:00:00Z",
+      "metadata": {
+        "confidence": 0.92,
+        "processingVersion": "v2.1.0",
+        "originalSource": "mobile_app",
+        "relatedEventIds": ["event_002", "event_003"]
+      }
+    },
+    "event_002": {
+      "id": "event_002",
+      "title": "Street Festival in Mission District",
+      "description": "Annual Dia de los Muertos celebration with live music, food vendors, and art installations",
+      "eventType": "celebration",
+      "timestamp": "2024-01-15T14:00:00Z",
+      "location": {
+        "latitude": 37.7599,
+        "longitude": -122.4148,
+        "address": "24th Street between Mission and Valencia",
+        "neighborhood": "Mission District",
+        "city": "San Francisco",
+        "state": "CA",
+        "country": "USA"
+      },
+      "mediaUrls": [
+        "https://storage.googleapis.com/city-pulse/images/festival_001.jpg",
+        "https://storage.googleapis.com/city-pulse/images/festival_002.jpg"
+      ],
+      "userId": "user_456",
+      "aiSummary": "Community celebration event in Mission District. Positive sentiment with high community engagement. Street closures expected until 10 PM.",
+      "source": "user",
+      "sentimentScore": 0.8,
+      "severity": "low",
+      "status": "active",
+      "tags": ["festival", "culture", "community", "street-closure"],
+      "verificationCount": 3,
+      "reportCount": 7,
+      "upvotes": 15,
+      "downvotes": 0,
+      "createdAt": "2024-01-15T14:00:00Z",
+      "updatedAt": "2024-01-15T14:30:00Z",
+      "expiresAt": "2024-01-15T22:00:00Z",
+      "metadata": {
+        "confidence": 0.95,
+        "processingVersion": "v2.1.0",
+        "originalSource": "mobile_app"
+      }
+    },
+    "event_003": {
+      "id": "event_003",
+      "title": "Power Outage in SOMA District",
+      "description": "Widespread power outage affecting approximately 2,500 customers. PG&E crews dispatched to investigate transformer issue.",
+      "eventType": "power",
+      "timestamp": "2024-01-15T16:45:00Z",
+      "location": {
+        "latitude": 37.7849,
+        "longitude": -122.4094,
+        "address": "SOMA District",
+        "neighborhood": "South of Market",
+        "city": "San Francisco",
+        "state": "CA",
+        "country": "USA"
+      },
+      "mediaUrls": [],
+      "userId": null,
+      "aiSummary": "AI-detected power outage based on utility company data and social media reports. Estimated restoration time: 3-4 hours.",
+      "source": "civic",
+      "sentimentScore": -0.6,
+      "severity": "medium",
+      "status": "monitoring",
+      "tags": ["power-outage", "infrastructure", "pge", "emergency"],
+      "verificationCount": 8,
+      "reportCount": 25,
+      "upvotes": 12,
+      "downvotes": 2,
+      "createdAt": "2024-01-15T16:45:00Z",
+      "updatedAt": "2024-01-15T17:30:00Z",
+      "expiresAt": "2024-01-15T20:00:00Z",
+      "metadata": {
+        "confidence": 0.88,
+        "processingVersion": "v2.1.0",
+        "originalSource": "pge_api",
+        "relatedEventIds": ["event_004"]
+      }
+    }
+  },
+  "users": {
+    "user_123": {
+      "id": "user_123",
+      "email": "john.doe@example.com",
+      "displayName": "John Doe",
+      "photoURL": "https://storage.googleapis.com/city-pulse/avatars/user_123.jpg",
+      "trustScore": 85,
+      "locationSubscriptions": [
+        {
+          "id": "sub_001",
+          "name": "Home Area",
+          "center": {
+            "latitude": 37.4419,
+            "longitude": -122.1430
+          },
+          "radius": 5000,
+          "eventTypes": ["traffic", "emergency", "construction"],
+          "notificationEnabled": true,
+          "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+          "id": "sub_002",
+          "name": "Work Commute",
+          "center": {
+            "latitude": 37.7749,
+            "longitude": -122.4194
+          },
+          "radius": 2000,
+          "eventTypes": ["traffic"],
+          "notificationEnabled": true,
+          "createdAt": "2024-01-01T00:00:00Z"
+        }
+      ],
+      "reportingHistory": {
+        "totalReports": 47,
+        "verifiedReports": 42,
+        "falseReports": 2,
+        "lastReportDate": "2024-01-15T08:30:00Z",
+        "averageAccuracy": 0.89,
+        "reportsByCategory": {
+          "traffic": 35,
+          "construction": 8,
+          "emergency": 3,
+          "celebration": 1
+        }
+      },
+      "preferences": {
+        "notifications": {
+          "push": true,
+          "email": false,
+          "sms": true,
+          "frequency": "immediate"
+        },
+        "privacy": {
+          "shareLocation": true,
+          "publicProfile": true,
+          "showInLeaderboard": true
+        },
+        "filters": {
+          "defaultRadius": 5000,
+          "hiddenEventTypes": [],
+          "minimumSeverity": "low"
+        }
+      },
+      "verificationLevel": "trusted",
+      "badges": ["early_adopter", "reliable_reporter", "community_hero"],
+      "createdAt": "2023-06-15T00:00:00Z",
+      "lastActiveAt": "2024-01-15T09:00:00Z",
+      "isActive": true,
+      "moderationFlags": 0,
+      "contributionStats": {
+        "eventsReported": 47,
+        "eventsVerified": 156,
+        "mediaUploaded": 23,
+        "helpfulVotes": 89,
+        "streakDays": 12,
+        "lastContribution": "2024-01-15T08:30:00Z"
+      }
+    },
+    "user_456": {
+      "id": "user_456",
+      "email": "maria.garcia@example.com",
+      "displayName": "Maria Garcia",
+      "photoURL": "https://storage.googleapis.com/city-pulse/avatars/user_456.jpg",
+      "trustScore": 72,
+      "locationSubscriptions": [
+        {
+          "id": "sub_003",
+          "name": "Mission District",
+          "center": {
+            "latitude": 37.7599,
+            "longitude": -122.4148
+          },
+          "radius": 3000,
+          "eventTypes": ["celebration", "community", "traffic"],
+          "notificationEnabled": true,
+          "createdAt": "2024-01-10T00:00:00Z"
+        }
+      ],
+      "reportingHistory": {
+        "totalReports": 23,
+        "verifiedReports": 19,
+        "falseReports": 1,
+        "lastReportDate": "2024-01-15T14:00:00Z",
+        "averageAccuracy": 0.83,
+        "reportsByCategory": {
+          "celebration": 12,
+          "community": 6,
+          "traffic": 4,
+          "construction": 1
+        }
+      },
+      "preferences": {
+        "notifications": {
+          "push": true,
+          "email": true,
+          "sms": false,
+          "frequency": "hourly"
+        },
+        "privacy": {
+          "shareLocation": true,
+          "publicProfile": true,
+          "showInLeaderboard": false
+        },
+        "filters": {
+          "defaultRadius": 3000,
+          "hiddenEventTypes": ["power"],
+          "minimumSeverity": "low"
+        }
+      },
+      "verificationLevel": "phone",
+      "badges": ["community_champion", "event_photographer"],
+      "createdAt": "2023-11-20T00:00:00Z",
+      "lastActiveAt": "2024-01-15T14:30:00Z",
+      "isActive": true,
+      "moderationFlags": 0,
+      "contributionStats": {
+        "eventsReported": 23,
+        "eventsVerified": 67,
+        "mediaUploaded": 45,
+        "helpfulVotes": 34,
+        "streakDays": 5,
+        "lastContribution": "2024-01-15T14:00:00Z"
+      }
+    }
+  },
+  "eventVerifications": {
+    "verification_001": {
+      "id": "verification_001",
+      "eventId": "event_001",
+      "userId": "user_789",
+      "verificationType": "confirm",
+      "timestamp": "2024-01-15T08:45:00Z",
+      "confidence": 0.9,
+      "notes": "Can confirm heavy traffic, took alternate route",
+      "mediaUrls": []
+    },
+    "verification_002": {
+      "id": "verification_002",
+      "eventId": "event_002",
+      "userId": "user_101",
+      "verificationType": "media",
+      "timestamp": "2024-01-15T14:15:00Z",
+      "confidence": 1.0,
+      "notes": "Great festival atmosphere!",
+      "mediaUrls": ["https://storage.googleapis.com/city-pulse/images/verification_002.jpg"]
+    }
+  },
+  "notifications": {
+    "notification_001": {
+      "id": "notification_001",
+      "userId": "user_123",
+      "eventId": "event_001",
+      "type": "new_event",
+      "title": "Traffic Alert in Your Area",
+      "message": "Heavy traffic reported on I-280 near your home location",
+      "isRead": false,
+      "createdAt": "2024-01-15T08:30:00Z",
+      "expiresAt": "2024-01-15T18:00:00Z",
+      "actionUrl": "/events/event_001"
+    }
+  },
+  "aiProcessingLogs": {
+    "log_001": {
+      "id": "log_001",
+      "eventId": "event_001",
+      "processingType": "sentiment_analysis",
+      "inputData": {
+        "text": "Heavy Traffic on I-280 Southbound",
+        "description": "Multiple lane closure due to construction work causing significant delays during rush hour"
+      },
+      "outputData": {
+        "sentimentScore": -0.7,
+        "emotions": ["frustration", "urgency"],
+        "keywords": ["traffic", "delays", "construction"]
+      },
+      "confidence": 0.92,
+      "processingTime": 150,
+      "modelVersion": "sentiment-v2.1.0",
+      "timestamp": "2024-01-15T08:30:15Z"
+    }
+  }
+}

@@ -1,0 +1,106 @@
+// Firestore Security Rules for City Data App
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Events collection
+    match /events/{eventId} {
+      // Anyone can read events
+      allow read: if true;
+      
+      // Only authenticated users can create events
+      allow create: if request.auth != null 
+        && request.auth.uid == resource.data.userId
+        && validateEventData(request.resource.data);
+      
+      // Users can update their own events, moderators can update any
+      allow update: if request.auth != null 
+        && (request.auth.uid == resource.data.userId 
+            || hasModeratorRole(request.auth.uid))
+        && validateEventData(request.resource.data);
+      
+      // Only moderators can delete events
+      allow delete: if request.auth != null 
+        && hasModeratorRole(request.auth.uid);
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Users can read their own profile, others can read public data
+      allow read: if request.auth != null 
+        && (request.auth.uid == userId 
+            || resource.data.preferences.privacy.publicProfile == true);
+      
+      // Users can only create/update their own profile
+      allow create, update: if request.auth != null 
+        && request.auth.uid == userId
+        && validateUserData(request.resource.data);
+      
+      // Users cannot delete their own profile (admin only)
+      allow delete: if false;
+    }
+    
+    // Event verifications
+    match /eventVerifications/{verificationId} {
+      // Anyone can read verifications
+      allow read: if true;
+      
+      // Only authenticated users can create verifications
+      allow create: if request.auth != null 
+        && request.auth.uid == request.resource.data.userId;
+      
+      // Users can update their own verifications
+      allow update: if request.auth != null 
+        && request.auth.uid == resource.data.userId;
+      
+      // No deletion of verifications
+      allow delete: if false;
+    }
+    
+    // Notifications
+    match /notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if request.auth != null 
+        && request.auth.uid == resource.data.userId;
+      
+      // System creates notifications, users can update read status
+      allow create: if false; // Created by cloud functions only
+      allow update: if request.auth != null 
+        && request.auth.uid == resource.data.userId
+        && onlyUpdatingReadStatus(request.resource.data, resource.data);
+      
+      // Users can delete their own notifications
+      allow delete: if request.auth != null 
+        && request.auth.uid == resource.data.userId;
+    }
+    
+    // AI Processing Logs (read-only for debugging)
+    match /aiProcessingLogs/{logId} {
+      allow read: if request.auth != null && hasModeratorRole(request.auth.uid);
+      allow write: if false; // Only cloud functions can write
+    }
+    
+    // Helper functions
+    function validateEventData(data) {
+      return data.keys().hasAll(['title', 'description', 'eventType', 'location', 'source'])
+        && data.eventType in ['traffic', 'power', 'celebration', 'emergency', 'construction', 'weather']
+        && data.source in ['user', 'social', 'civic', 'ai', 'sensor']
+        && data.severity in ['low', 'medium', 'high', 'critical']
+        && data.sentimentScore >= -1 && data.sentimentScore <= 1;
+    }
+    
+    function validateUserData(data) {
+      return data.keys().hasAll(['email', 'displayName', 'trustScore'])
+        && data.trustScore >= 0 && data.trustScore <= 100;
+    }
+    
+    function hasModeratorRole(uid) {
+      return exists(/databases/$(database)/documents/users/$(uid))
+        && get(/databases/$(database)/documents/users/$(uid)).data.role == 'moderator';
+    }
+    
+    function onlyUpdatingReadStatus(newData, oldData) {
+      return newData.diff(oldData).affectedKeys().hasOnly(['isRead']);
+    }
+  }
+}
