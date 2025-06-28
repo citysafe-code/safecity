@@ -11,7 +11,7 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentView, setCurrentView] = useState<'dashboard' | 'moderator'>('dashboard');
-  const [showSentimentHeatmap, setShowSentimentHeatmap] = useState(true);
+  const [showSentimentHeatmap, setShowSentimentHeatmap] = useState(false);
   const [filters, setFilters] = useState<FilterOptions>({
     category: '',
     severity: '',

@@ -12,7 +12,7 @@ interface GoogleMapProps {
 export const GoogleMap: React.FC<GoogleMapProps> = ({ 
   events, 
   className = '',
-  showSentimentHeatmap = true 
+  showSentimentHeatmap = false 
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [selectedArea, setSelectedArea] = useState<any>(null);
@@ -49,6 +49,34 @@ export const GoogleMap: React.FC<GoogleMapProps> = ({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
+      {/* Base Map */}
+      <div
+        ref={mapRef}
+        className="w-full h-full bg-gradient-to-br from-blue-50 to-green-50 relative"
+        style={{
+          backgroundImage: `
+            linear-gradient(45deg, rgba(59, 130, 246, 0.1) 25%, transparent 25%),
+            linear-gradient(-45deg, rgba(59, 130, 246, 0.1) 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, rgba(59, 130, 246, 0.1) 75%),
+            linear-gradient(-45deg, transparent 75%, rgba(59, 130, 246, 0.1) 75%)
+          `,
+          backgroundSize: '20px 20px',
+          backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+        }}
+      >
+        {/* Simulated city streets */}
+        <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 800 600">
+          <defs>
+            <pattern id="streets" patternUnits="userSpaceOnUse" width="100" height="100">
+              <rect width="100" height="100" fill="transparent" />
+              <line x1="0" y1="50" x2="100" y2="50" stroke="#374151" strokeWidth="2" />
+              <line x1="50" y1="0" x2="50" y2="100" stroke="#374151" strokeWidth="2" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#streets)" />
+        </svg>
+      </div>
+
       {/* Sentiment Heatmap Layer */}
       {showSentimentHeatmap && (
         <SentimentHeatmap 
@@ -91,7 +119,9 @@ export const GoogleMap: React.FC<GoogleMapProps> = ({
       {/* Map overlay with city name */}
       <div className="absolute top-4 left-4 bg-white bg-opacity-90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg z-30">
         <h3 className="font-semibold text-gray-800">San Francisco</h3>
-        <p className="text-sm text-gray-600">Live Sentiment & Events</p>
+        <p className="text-sm text-gray-600">
+          {showSentimentHeatmap ? 'Live Sentiment & Events' : 'City Event Monitoring'}
+        </p>
         {selectedArea && (
           <p className="text-xs text-blue-600 mt-1">
             Viewing: {selectedArea.area}
@@ -117,24 +147,47 @@ export const GoogleMap: React.FC<GoogleMapProps> = ({
         </motion.button>
       </div>
 
-      {/* Legend */}
-      <div className="absolute bottom-4 left-4 bg-white bg-opacity-90 backdrop-blur-sm rounded-lg p-3 shadow-lg z-30">
-        <h4 className="font-semibold text-gray-800 text-sm mb-2">Sentiment Heatmap</h4>
-        <div className="space-y-1 text-xs">
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 rounded bg-green-500"></div>
-            <span>Positive</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 rounded bg-gray-500"></div>
-            <span>Neutral</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 rounded bg-red-500"></div>
-            <span>Negative</span>
+      {/* Legend - only show when sentiment heatmap is active */}
+      {showSentimentHeatmap && (
+        <div className="absolute bottom-4 left-4 bg-white bg-opacity-90 backdrop-blur-sm rounded-lg p-3 shadow-lg z-30">
+          <h4 className="font-semibold text-gray-800 text-sm mb-2">Sentiment Heatmap</h4>
+          <div className="space-y-1 text-xs">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded bg-green-500"></div>
+              <span>Positive</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded bg-gray-500"></div>
+              <span>Neutral</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded bg-red-500"></div>
+              <span>Negative</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Standard map legend */}
+      {!showSentimentHeatmap && (
+        <div className="absolute bottom-4 left-4 bg-white bg-opacity-90 backdrop-blur-sm rounded-lg p-3 shadow-lg z-30">
+          <h4 className="font-semibold text-gray-800 text-sm mb-2">Event Types</h4>
+          <div className="space-y-1 text-xs">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded bg-red-500"></div>
+              <span>Traffic</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded bg-blue-500"></div>
+              <span>Civic</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded bg-green-500"></div>
+              <span>Celebration</span>
+            </div>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };

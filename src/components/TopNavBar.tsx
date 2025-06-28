@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Filter, Menu, Activity, Shield, Users, TrendingUp, Eye, EyeOff } from 'lucide-react';
+import { Search, Filter, Menu, Activity, Shield, Users, TrendingUp, Map, Layers } from 'lucide-react';
 import { FilterOptions } from '../types';
 
 interface TopNavBarProps {
@@ -97,26 +97,39 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
           </div>
 
           <div className="flex items-center space-x-2">
-            {/* Sentiment Heatmap Toggle */}
+            {/* Map Layer Controls */}
             {onToggleSentimentHeatmap && (
-              <motion.button
-                onClick={onToggleSentimentHeatmap}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
-                  showSentimentHeatmap 
-                    ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <TrendingUp className="h-4 w-4" />
-                <span className="text-sm font-medium">Sentiment</span>
-                {showSentimentHeatmap ? (
-                  <Eye className="h-4 w-4" />
-                ) : (
-                  <EyeOff className="h-4 w-4" />
-                )}
-              </motion.button>
+              <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
+                <motion.button
+                  onClick={() => onToggleSentimentHeatmap()}
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    !showSentimentHeatmap
+                      ? 'bg-white text-blue-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  title="Standard Map View"
+                >
+                  <Map className="h-4 w-4" />
+                  <span>Map</span>
+                </motion.button>
+                
+                <motion.button
+                  onClick={() => onToggleSentimentHeatmap()}
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    showSentimentHeatmap
+                      ? 'bg-white text-blue-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  title="Sentiment Heatmap View"
+                >
+                  <TrendingUp className="h-4 w-4" />
+                  <span>Sentiment</span>
+                </motion.button>
+              </div>
             )}
 
             <motion.button
