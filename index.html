@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>City Pulse - Real-time City Monitoring</title>
     <meta name="description" content="Real-time city event monitoring dashboard for traffic, civic issues, and celebrations">
+    <script async defer 
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGFSo2s2dpOXiz-hArtmb-mJgjrMtTZUc&libraries=places,geometry&callback=initGoogleMaps">
+    </script>
+    <script>
+      window.initGoogleMaps = function() {
+        window.googleMapsLoaded = true;
+        window.dispatchEvent(new Event('google-maps-loaded'));
+      };
+    </script>
   </head>
   <body>
     <div id="root"></div>
